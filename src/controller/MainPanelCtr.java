@@ -147,6 +147,10 @@ public class MainPanelCtr {
 					projects.add(project);
 					
 					project = null;
+					
+					numeroRigheCodice = 0;
+					numFile = 0;
+					numSottoCartelle = 0;
 				}
 				
 			}
@@ -248,7 +252,7 @@ public class MainPanelCtr {
 						numFile++;
 						numeroRigheCodice += cont;
 						
-//						System.out.println(list[j].getAbsolutePath()); 
+						System.out.println(list[j].getAbsolutePath()); 
 					}
 				}
 		}

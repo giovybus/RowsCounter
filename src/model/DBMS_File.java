@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.omg.CORBA.RepositoryIdHelper;
-
 import features.DBMS_Settings;
 
 /**
