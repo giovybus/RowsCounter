@@ -1,16 +1,18 @@
 package view.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import features.TextPrompt;
 import model.Project;
 
 /**
@@ -20,7 +22,12 @@ import model.Project;
  * created on 26/apr/2015 17:15:59
  */
 public class MainPanel extends JPanel{
-
+	private static final long serialVersionUID = 1L;
+	
+	private JPanel panNorth;
+	private JTextField fieldSearch;
+	private JButton buttSearch;
+	
 	private JPanel panCenter;
 	private JTable table;
 	private DefaultTableModel tableModel;
@@ -63,17 +70,12 @@ public class MainPanel extends JPanel{
 	private JButton buttOpen;
 	
 	/**
-	 * a list of all projects 
-	 * (this list is filled by database)
-	 */
-	private List<Project>projects;
-	
-	/**
 	 * default constructor
 	 */
 	public MainPanel() {
 		super(new BorderLayout());
 		
+		initNorthPanel();
 		initSouthPanel();
 		initCenterPanel();
 		fillPanel();
@@ -82,18 +84,53 @@ public class MainPanel extends JPanel{
 	/**
 	 * 
 	 */
-	private void initSouthPanel() {
-		panSouth = new JPanel(new FlowLayout(FlowLayout.LEFT));
+	private void initNorthPanel() {
+		panNorth = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		
-		initButtView();
-		panSouth.add(buttView);
+		initFieldSearch();
+		panNorth.add(fieldSearch);
+		
+		initButtSearch();
+		panNorth.add(buttSearch);
 	}
 
 	/**
 	 * 
 	 */
-	private void initButtView() {
-		buttView = new JButton("View project");		
+	private void initButtSearch() {
+		buttSearch = new JButton("Search");
+	}
+
+	/**
+	 * 
+	 */
+	private void initFieldSearch() {
+		fieldSearch = new JTextField(50);
+		
+		TextPrompt tp = new TextPrompt("insert search query for all projects", fieldSearch);
+		tp.setForeground(Color.LIGHT_GRAY);
+	}
+
+	/**
+	 * 
+	 */
+	private void initSouthPanel() {
+		panSouth = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		
+		buttView = new JButton("View project");
+		panSouth.add(buttView);
+		
+		buttCounting = new JButton("Counting");
+		panSouth.add(buttCounting);
+		
+		buttExport = new JButton("Export PDF");
+		panSouth.add(buttExport);
+		
+		buttOpen = new JButton("Open directory");
+		panSouth.add(buttOpen);
+		
+		buttDelete = new JButton("Delete");
+		panSouth.add(buttDelete);
 	}
 
 	/**
@@ -127,6 +164,7 @@ public class MainPanel extends JPanel{
 	 *  fill the panel
 	 */
 	private void fillPanel() {
+		this.add(panNorth, BorderLayout.NORTH);
 		this.add(panCenter, BorderLayout.CENTER);
 		this.add(panSouth, BorderLayout.SOUTH);
 		
@@ -142,5 +180,29 @@ public class MainPanel extends JPanel{
 	public JButton getButtonView(){
 		return this.buttView;
 	}
-	 
+	
+	public JButton getButtonCounting(){
+		return this.buttCounting;
+	}
+	
+	public JButton getButtonExport(){
+		return this.buttExport;
+	}
+	
+	public JButton getButtonOpen(){
+		return this.buttOpen;
+	}
+	
+	public JButton getButtonDelete(){
+		return this.buttDelete;
+	}
+	
+	public void addRow(Project p){
+		tableModel.addRow(p.getObject());
+	}
+	
+	public int getSelectedRow(){
+		return this.table.getSelectedRow();
+	}
+
 }

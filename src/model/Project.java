@@ -1,7 +1,9 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * @author Giovanni Buscarino (giovybus) Copyright (c) 2015 <br>
@@ -51,6 +53,30 @@ public class Project {
 	public Project(String absolutePath, Date latestCountingDate) {
 		this.absolutePath = absolutePath;
 		this.latestCountingDate = latestCountingDate;
+	}
+	
+	public String getDateStringIT(){
+		SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		return s.format(this.latestCountingDate);
+	}
+
+	/**
+	 * @return the absolutePath
+	 */
+	public String getAbsolutePath() {
+		return absolutePath;
+	}
+	
+	/**
+	 * @return
+	 */
+	public Object[] getObject() {
+		Object []o = {
+				this.absolutePath,
+				getDateStringIT()
+		};
+		
+		return o;
 	}
 	
 }

@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import features.DBMS_Settings;
 
@@ -13,15 +11,14 @@ import features.DBMS_Settings;
  * @author Giovanni Buscarino (giovybus) Copyright (c) 2015 <br>
  * <b>Email:</b> giovanni.buscarino[at]gmail.com<br>
  *
- * created on 27/apr/2015 13:10:50
+ * created on 27/apr/2015 15:23:18
  */
-public class DBMS_Project {
-	private final static String table = 
-			"CREATE TABLE IF NOT EXISTS project (" +
-				"id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
-				"absolutePath VARCHAR(250) UNIQUE," +
-				"lastCountingDate DATETIME)";
-
+public class DBMS_ListExtensions {
+	private static final String table = 
+			"CREATE TABLE IF NOT EXISTS listExtensions (" +
+					"extension VARCHAR(30) PRIMARY KEY NOT NULL" +
+			")";
+	
 	private Connection conn;
 	private ResultSet res;
 	private Statement sta;
@@ -30,7 +27,7 @@ public class DBMS_Project {
 	/**
 	 * 
 	 */
-	public DBMS_Project() {
+	public DBMS_ListExtensions() {
 		settings = new DBMS_Settings();
 		createConn();
 	}
@@ -79,28 +76,4 @@ public class DBMS_Project {
 		}
 		
 	}
-
-	/**
-	 * @return
-	 * all rows in db
-	 */
-	public List<Project> getAllProjects() {
-		List<Project>projects = null;
-		
-		checkConnessione();
-		try{
-			sta = conn.createStatement();
-			res = sta.executeQuery("SELECT * FROM project");
-			while(res.next()){
-				if(projects == null)projects = new ArrayList<>();
-				projects.add(new Project(res.getInt("id"), res.getString("absolutePath"),
-						res.getDate("lastCountingDate")));
-			}
-		}catch(Exception exc){
-			exc.printStackTrace();
-		}
-		
-		return projects;
-	}
-	
 }

@@ -1,11 +1,9 @@
 package view;
 
-import java.awt.BorderLayout;
-
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import controller.MainGuiCtr;
+import controller.MainPanelCtr;
 import main.RowsCounter;
 import view.panels.CountingsPanel;
 import view.panels.FilesPanel;
@@ -28,13 +26,18 @@ public class MainGui {
 	 * the global controller
 	 */
 	private MainGuiCtr mainGuiCtr;
+	private MainPanelCtr mainPanelCtr;
 	
 	/**
 	 * constructor 
 	 */
 	public MainGui() {
 		panMain = new MainPanel();
-		mainGuiCtr = new MainGuiCtr(this, panMain, panCount, panFiles);
+		panCount = new CountingsPanel();
+		panFiles = new FilesPanel();
+		
+		//mainGuiCtr = new MainGuiCtr(this, panMain, panCount, panFiles);
+		mainPanelCtr = new MainPanelCtr(this, panMain, panCount);
 		
 		initFrame();
 	}
@@ -65,5 +68,10 @@ public class MainGui {
 	public void removeMainPanel(){
 		frm.remove(panMain);
 		frm.repaint();
+	}
+	
+	public void addCountingPanel(){
+		frm.add(panCount);
+		frm.revalidate();
 	}
 }
