@@ -197,6 +197,10 @@ public class MainPanel extends JPanel{
 		return this.buttDelete;
 	}
 	
+	public JButton getButtonSearch(){
+		return this.buttSearch;
+	}
+	
 	public void addRow(Project p){
 		tableModel.addRow(p.getObject());
 	}

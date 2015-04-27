@@ -54,7 +54,21 @@ public class Counting {
 	 * a list of files, relative
 	 * this counting
 	 */
-	private List<File>files;
+	private List<FileSource>files;
+	
+	/**
+	 * constructor
+	 */
+	public Counting(int id, int idProject, Date dateCounting, long numberOfPack, 
+			long numberOfFiles, long numberOfRows, ExtensionToCounting extensions) {
+		this.id = id;
+		this.idProject = idProject;
+		this.dateCounting = dateCounting;
+		this.numberOfFiles = numberOfFiles;
+		this.numberOfPack = numberOfPack;
+		this.numberOfRows = numberOfRows;
+		this.extensions = extensions;
+	}
 	
 	/**
 	 * constructor
@@ -63,9 +77,24 @@ public class Counting {
 			long numberOfFiles, long numberOfRows, ExtensionToCounting extensions) {
 		this.idProject = idProject;
 		this.dateCounting = dateCounting;
+		this.numberOfFiles = numberOfFiles;
 		this.numberOfPack = numberOfPack;
 		this.numberOfRows = numberOfRows;
 		this.extensions = extensions;
+	}
+	
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
 	}
 	
 	/**
@@ -76,10 +105,38 @@ public class Counting {
 	}
 	
 	/**
+	 * @return the idProject
+	 */
+	public int getIdProject() {
+		return idProject;
+	}
+	
+	/**
 	 * @param dateCounting the dateCounting to set
 	 */
 	public void setDateCounting(Date dateCounting) {
 		this.dateCounting = dateCounting;
+	}
+	
+	/**
+	 * @return the dateCounting
+	 */
+	public Date getDateCounting() {
+		return dateCounting;
+	}
+	
+	/**
+	 * @param numberOfFiles the numberOfFiles to set
+	 */
+	public void setNumberOfFiles(long numberOfFiles) {
+		this.numberOfFiles = numberOfFiles;
+	}
+	
+	/**
+	 * @return the numberOfFiles
+	 */
+	public long getNumberOfFiles() {
+		return numberOfFiles;
 	}
 	
 	/**
@@ -90,11 +147,40 @@ public class Counting {
 	}
 	
 	/**
+	 * @return the numberOfPack
+	 */
+	public long getNumberOfPack() {
+		return numberOfPack;
+	}
+	
+	/**
 	 * @param numberOfRows the numberOfRows to set
 	 */
 	public void setNumberOfRows(long numberOfRows) {
 		this.numberOfRows = numberOfRows;
 	}
+	
+	/**
+	 * @return the numberOfRows
+	 */
+	public long getNumberOfRows() {
+		return numberOfRows;
+	}
+	
+	/**
+	 * @param files the files to set
+	 */
+	public void setFiles(List<FileSource> files) {
+		this.files = files;
+	}
+	
+	/**
+	 * @return the files
+	 */
+	public List<FileSource> getFiles() {
+		return files;
+	}
+	
 	
 	/**
 	 * @param extensions the extensions to set
@@ -107,14 +193,6 @@ public class Counting {
 		SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return s.format(this.dateCounting);
 	}
-	
-	/**
-	 * @return the numberOfRows
-	 */
-	public long getNumberOfRows() {
-		return numberOfRows;
-	}
-	
 
 
 	/**

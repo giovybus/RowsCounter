@@ -185,6 +185,8 @@ private static final long serialVersionUID = 1L;
 	
 	public void setCountings(List<Counting>countings){
 		this.countings = countings;
+		
+		this.tableModel.setRowCount(0);
 		if(this.countings != null){
 			for(Counting c : this.countings){
 				addRow(c);

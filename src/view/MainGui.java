@@ -2,7 +2,7 @@ package view;
 
 import javax.swing.JFrame;
 
-import controller.MainGuiCtr;
+import controller.CountingPanelCtr;
 import controller.MainPanelCtr;
 import main.RowsCounter;
 import view.panels.CountingsPanel;
@@ -22,11 +22,8 @@ public class MainGui {
 	private CountingsPanel panCount;
 	private FilesPanel panFiles;
 	
-	/**
-	 * the global controller
-	 */
-	private MainGuiCtr mainGuiCtr;
 	private MainPanelCtr mainPanelCtr;
+	private CountingPanelCtr countingPanelCtr;
 	
 	/**
 	 * constructor 
@@ -38,6 +35,7 @@ public class MainGui {
 		
 		//mainGuiCtr = new MainGuiCtr(this, panMain, panCount, panFiles);
 		mainPanelCtr = new MainPanelCtr(this, panMain, panCount);
+		countingPanelCtr = new CountingPanelCtr(this, panCount);
 		
 		initFrame();
 	}
@@ -72,6 +70,16 @@ public class MainGui {
 	
 	public void addCountingPanel(){
 		frm.add(panCount);
+		frm.revalidate();
+	}
+
+	public void removeCountingPanel() {
+		frm.remove(panCount);
+		frm.repaint();
+	}
+	
+	public void addMainPanel(){
+		frm.add(panMain);
 		frm.revalidate();
 	}
 }

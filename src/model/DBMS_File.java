@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.omg.CORBA.RepositoryIdHelper;
+
 import features.DBMS_Settings;
 
 /**
@@ -18,6 +20,7 @@ public class DBMS_File {
 			"CREATE TABLE IF NOT EXISTS file(" +
 					"idCounting BIGINT," +
 					"absolutePath VARCHAR(250)," +
+					"absolutePathBackup VARCHAR(250)," +
 					"countingRows BIGINT DEFAULT 0," +
 					"FOREIGN KEY (idCounting) REFERENCES counting(id) ON DELETE CASCADE" +
 			")";
@@ -76,6 +79,26 @@ public class DBMS_File {
 			}
 		}catch(Exception e){
 			e.printStackTrace();
+		}
+		
+	}
+
+	/**
+	 * @param source
+	 */
+	public boolean inserisci(FileSource source) {
+		checkConnessione();
+		try{
+			sta = conn.createStatement();
+			sta.execute("INSERT INTO file (idCounting, absolutePath, countingRows)VALUES("
+					+ source.getIdCounting() + ","
+					+ "'" + source.getAbsolutePath() + "',"
+					+ source.getRowsCounting() 
+					+ ")");
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 		
 	}

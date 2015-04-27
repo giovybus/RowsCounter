@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import features.DBMS_Settings;
 
@@ -19,6 +21,7 @@ public class DBMS_Counting {
 			"idProject BIGINT," +
 			"dateCounting DATETIME," +
 			"numberOfPackage BIGINT DEFAULT 0," +
+			"numberOfFiles BIGINT DEFAULT 0," +
 			"numberOfRows BIGINT DEFAULT 0, " +
 			"FOREIGN KEY(idProject) REFERENCES project(id) ON DELETE CASCADE"
 			+ ")";
@@ -77,6 +80,91 @@ public class DBMS_Counting {
 			}
 		}catch(Exception e){
 			e.printStackTrace();
+		}
+		
+	}
+
+	/**
+	 * @param project
+	 * @return
+	 */
+	public List<Counting> getCountingForProject(Project project) {
+		List<Counting>c = null;
+		checkConnessione();
+		
+		try {
+			sta = conn.createStatement();
+			res = sta.executeQuery("SELECT * FROM counting WHERE idProject=" + project.getId());
+			
+			while(res.next()){
+				if(c == null)c = new ArrayList<>();
+				c.add(new Counting(res.getInt("idProject"), 
+						res.getDate("dateCounting"), res.getLong("numberOfPackage"), 
+						res.getLong("numberOfFiles"), res.getLong("numberOfRows"), null));
+			}
+			
+			sta.close();
+			res.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return c;
+	}
+
+	/**
+	 * @param countingTemp
+	 */
+	public boolean inserisci(Counting countingTemp) {
+		checkConnessione();
+		try{
+			sta = conn.createStatement();
+			sta.execute("INSERT INTO counting (idProject, datecounting, "
+					+ "numberofpackage, numberoffiles, numberofrows) VALUES ("
+					+ countingTemp.getIdProject() + ","
+					+ "now(),"
+					+ countingTemp.getNumberOfPack() + ","
+					+ countingTemp.getNumberOfFiles() + ","
+					+ countingTemp.getNumberOfRows()
+					+ ")", Statement.RETURN_GENERATED_KEYS);
+			
+			res = sta.getGeneratedKeys();
+			if(res.next()){
+				countingTemp.setId(res.getInt(1));
+			}
+			
+			sta.close();
+			conn.close();
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
+	/**
+	 * @param countingTemp
+	 */
+	public boolean update(Counting countingTemp) {
+		checkConnessione();
+		try{
+			sta = conn.createStatement();
+			sta.execute("UPDATE counting SET "
+					+ "idProject=" + countingTemp.getIdProject() + ","
+					+ "datecounting= now(),"
+					+ "numberofpackage=" + countingTemp.getNumberOfPack() + ","
+					+ "numberoffiles=" + countingTemp.getNumberOfFiles() + ","
+					+ "numberofrows=" + countingTemp.getNumberOfRows()
+					+ " where id=" + countingTemp.getId());
+			
+			sta.close();
+			conn.close();
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 		
 	}

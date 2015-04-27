@@ -96,11 +96,68 @@ public class DBMS_Project {
 				projects.add(new Project(res.getInt("id"), res.getString("absolutePath"),
 						res.getDate("lastCountingDate")));
 			}
+			
+			conn.close();
+			sta.close();
+			res.close();
 		}catch(Exception exc){
 			exc.printStackTrace();
 		}
 		
 		return projects;
+	}
+
+	/**
+	 * @param absolutePath
+	 * @return
+	 */
+	public Project getProjectByPath(String absolutePath) {
+		Project p = null;
+		
+		checkConnessione();
+		try{
+			sta = conn.createStatement();
+			res = sta.executeQuery("SELECT * FROM project WHERE absolutePath='" + absolutePath + "'");
+			
+			if(res.next()){
+				p = new Project(res.getInt("id"), res.getString("absolutePath"), 
+						res.getDate("lastCountingDate"));
+			}
+			
+			sta.close();
+			res.close();
+			conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return p;
+	}
+
+	/**
+	 * @param project
+	 */
+	public boolean insert(Project project) {
+		checkConnessione();
+		try{
+			sta = conn.createStatement();
+			sta.execute("INSERT INTO project (absolutePath, lastCountingDate) "
+					+ "VALUES ("
+					+ "'" + project.getAbsolutePath() + "',"
+					+ "now()" 
+					+ ")", Statement.RETURN_GENERATED_KEYS);
+			
+			res = sta.getGeneratedKeys();
+			if(res.next()){
+				project.setId(res.getInt(1));
+			}
+			
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
 	
 }

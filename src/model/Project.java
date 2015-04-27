@@ -1,6 +1,7 @@
 package model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -55,6 +56,20 @@ public class Project {
 		this.latestCountingDate = latestCountingDate;
 	}
 	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getDateStringIT(){
 		SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return s.format(this.latestCountingDate);
@@ -65,6 +80,25 @@ public class Project {
 	 */
 	public String getAbsolutePath() {
 		return absolutePath;
+	}
+	
+	/**
+	 * @param countings the countings to set
+	 */
+	public void setCountings(List<Counting> countings) {
+		this.countings = countings;
+	}
+	
+	/**
+	 * @return the countings
+	 */
+	public List<Counting> getCountings() {
+		return countings;
+	}
+	
+	public void addCounting(Counting c){
+		if(countings == null) countings = new ArrayList<>();
+		countings.add(c);
 	}
 	
 	/**

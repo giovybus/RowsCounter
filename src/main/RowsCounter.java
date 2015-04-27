@@ -2,6 +2,7 @@ package main;
 
 import javax.swing.UIManager;
 
+import features.DBMS_Settings;
 import view.MainGui;
 
 /**
@@ -23,6 +24,7 @@ public class RowsCounter {
 	 */
 	public static void main(String []args){
 		setLookAndFeel();
+		DBMS_Settings.installDB();
 		new MainGui();
 	}
 
