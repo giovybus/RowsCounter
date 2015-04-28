@@ -1,6 +1,7 @@
 package view.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.List;
@@ -12,8 +13,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import features.TextPrompt;
 import model.Counting;
-import model.Project;
 
 /**
  * @author Giovanni Buscarino (giovybus) Copyright (c) 2015 <br>
@@ -42,6 +43,13 @@ private static final long serialVersionUID = 1L;
 	 * to view all projects 
 	 */
 	private JButton buttReturn;
+	
+	/**
+	 * this button allow you
+	 * to view the files of
+	 * the selected counting
+	 */
+	private JButton buttView;
 	
 	/**
 	 * this button open the filechooser
@@ -90,7 +98,21 @@ private static final long serialVersionUID = 1L;
 	private void initNorthPanel() {
 		panNorth = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		
+		initFieldSearch();
+		panNorth.add(fieldSearch);
 		
+		buttSearch = new JButton("Search");
+		panNorth.add(buttSearch);
+	}
+	
+	/**
+	 * 
+	 */
+	private void initFieldSearch() {
+		fieldSearch = new JTextField(50);
+		
+		TextPrompt tp = new TextPrompt("insert search query for this project", fieldSearch);
+		tp.setForeground(Color.LIGHT_GRAY);
 	}
 
 	/**
@@ -130,6 +152,9 @@ private static final long serialVersionUID = 1L;
 		buttReturn = new JButton("Return");
 		panSouth.add(buttReturn);
 		
+		buttView = new JButton("View files");
+		panSouth.add(buttView);
+		
 		buttCounting = new JButton("Counting");
 		panSouth.add(buttCounting);
 		
@@ -162,6 +187,10 @@ private static final long serialVersionUID = 1L;
 	public JButton getButtonReturn(){
 		return this.buttReturn;
 	}
+
+	public JButton getButtView() {
+		return buttView;
+	}
 	
 	public JButton getButtonCounting(){
 		return this.buttCounting;
@@ -177,6 +206,17 @@ private static final long serialVersionUID = 1L;
 	
 	public JButton getButtonDelete(){
 		return this.buttDelete;
+	}
+	
+	public String getQuerySearch(){
+		return this.fieldSearch.getText();
+	}
+	
+	/**
+	 * @return the fieldSearch
+	 */
+	public JTextField getFieldSearch() {
+		return fieldSearch;
 	}
 	
 	public void addRow(Counting c){
@@ -196,5 +236,19 @@ private static final long serialVersionUID = 1L;
 	
 	public int getSelectedRow(){
 		return this.table.getSelectedRow();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * the counting selected in table,
+	 * else return null
+	 */
+	public Counting getCountingSelected(){
+		if(getSelectedRow() != -1){
+			return this.countings.get(getSelectedRow());
+		}else{
+			return null;
+		}
 	}
 }

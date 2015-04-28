@@ -15,8 +15,10 @@ import model.DBMS_Project;
  * created on 27/apr/2015 13:11:46
  */
 public class DBMS_Settings {
-	private static final String HOME_DIR ="C:\\Users\\giovybus\\Desktop\\rc";
+	/*private static final String HOME_DIR ="C:\\Users\\giovybus\\Desktop\\rc";*/
+	private static final String HOME_DIR = "./database";
 	private String url = "jdbc:h2:" + HOME_DIR + "\\rowsCounter;AUTO_SERVER=TRUE;Mode=Mysql;";
+	
 	private String user = "root";
 	private String password = "";
 	

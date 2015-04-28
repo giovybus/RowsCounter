@@ -3,7 +3,6 @@ package model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * @author Giovanni Buscarino (giovybus) Copyright (c) 2015 <br>
@@ -59,11 +58,11 @@ public class Counting {
 	/**
 	 * constructor
 	 */
-	public Counting(int id, int idProject, Date dateCounting, long numberOfPack, 
+	public Counting(int id, int idProject, String dateCounting, long numberOfPack, 
 			long numberOfFiles, long numberOfRows, ExtensionToCounting extensions) {
 		this.id = id;
 		this.idProject = idProject;
-		this.dateCounting = dateCounting;
+		setDateString(dateCounting);
 		this.numberOfFiles = numberOfFiles;
 		this.numberOfPack = numberOfPack;
 		this.numberOfRows = numberOfRows;
@@ -194,6 +193,15 @@ public class Counting {
 		return s.format(this.dateCounting);
 	}
 
+	public void setDateString(String dateCounting){
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try{
+			this.dateCounting = s.parse(dateCounting);
+		}catch(Exception e){
+			e.printStackTrace();
+			this.dateCounting = null;
+		}
+	}
 
 	/**
 	 * @return

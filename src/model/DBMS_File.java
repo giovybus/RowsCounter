@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import features.DBMS_Settings;
 
@@ -19,7 +21,7 @@ public class DBMS_File {
 					"idCounting BIGINT," +
 					"absolutePath VARCHAR(250)," +
 					"absolutePathBackup VARCHAR(250)," +
-					"countingRows BIGINT DEFAULT 0," +
+					"rowsCounting BIGINT DEFAULT 0," +
 					"FOREIGN KEY (idCounting) REFERENCES counting(id) ON DELETE CASCADE" +
 			")";
 	
@@ -88,16 +90,46 @@ public class DBMS_File {
 		checkConnessione();
 		try{
 			sta = conn.createStatement();
-			sta.execute("INSERT INTO file (idCounting, absolutePath, countingRows)VALUES("
+			sta.execute("INSERT INTO file (idCounting, absolutePath, absolutePathBackup, rowsCounting)VALUES("
 					+ source.getIdCounting() + ","
 					+ "'" + source.getAbsolutePath() + "',"
+					+ "'" + source.getAbsolutePathBackup() + "',"
 					+ source.getRowsCounting() 
 					+ ")");
+			
+			sta.close();
+			conn.close();
 			return true;
 		}catch(Exception e){
 			e.printStackTrace();
 			return false;
 		}
 		
+	}
+
+	/**
+	 * @return
+	 */
+	public List<FileSource> getFilesByCounting(Counting c) {
+		List<FileSource>f = null;
+		
+		checkConnessione();
+		try{
+			sta = conn.createStatement();
+			res = sta.executeQuery("SELECT * FROM file WHERE idCounting=" + c.getId());
+			
+			while(res.next()){
+				if(f == null)f = new ArrayList<>();
+				f.add(new FileSource(res.getInt("idCounting"), res.getString("absolutePath"),
+						res.getString("absolutePathBackup"), res.getLong("rowsCounting")));
+			}
+			res.close();
+			sta.close();
+			conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return f;
 	}
 }

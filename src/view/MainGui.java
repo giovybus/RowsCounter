@@ -3,6 +3,7 @@ package view;
 import javax.swing.JFrame;
 
 import controller.CountingPanelCtr;
+import controller.FilesPanelCtr;
 import controller.MainPanelCtr;
 import main.RowsCounter;
 import view.panels.CountingsPanel;
@@ -22,8 +23,9 @@ public class MainGui {
 	private CountingsPanel panCount;
 	private FilesPanel panFiles;
 	
-	private MainPanelCtr mainPanelCtr;
+	/*private MainPanelCtr mainPanelCtr;
 	private CountingPanelCtr countingPanelCtr;
+	private FilesPanelCtr filesPanelCtr;*/
 	
 	/**
 	 * constructor 
@@ -34,8 +36,9 @@ public class MainGui {
 		panFiles = new FilesPanel();
 		
 		//mainGuiCtr = new MainGuiCtr(this, panMain, panCount, panFiles);
-		mainPanelCtr = new MainPanelCtr(this, panMain, panCount);
-		countingPanelCtr = new CountingPanelCtr(this, panCount);
+		/*mainPanelCtr = */new MainPanelCtr(this, panMain, panCount, panFiles);
+		/*countingPanelCtr = */new CountingPanelCtr(this, panCount, panFiles);
+		/*filesPanelCtr = */new FilesPanelCtr(this, panFiles);
 		
 		initFrame();
 	}
@@ -81,5 +84,15 @@ public class MainGui {
 	public void addMainPanel(){
 		frm.add(panMain);
 		frm.revalidate();
+	}
+	
+	public void addFilesPanel(){
+		frm.add(panFiles);
+		frm.revalidate();
+	}
+	
+	public void removeFilesPanel(){
+		frm.remove(panFiles);
+		frm.repaint();
 	}
 }

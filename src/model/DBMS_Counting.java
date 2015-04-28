@@ -98,8 +98,8 @@ public class DBMS_Counting {
 			
 			while(res.next()){
 				if(c == null)c = new ArrayList<>();
-				c.add(new Counting(res.getInt("idProject"), 
-						res.getDate("dateCounting"), res.getLong("numberOfPackage"), 
+				c.add(new Counting(res.getInt("id"), res.getInt("idProject"), 
+						res.getString("dateCounting"), res.getLong("numberOfPackage"), 
 						res.getLong("numberOfFiles"), res.getLong("numberOfRows"), null));
 			}
 			
@@ -115,6 +115,7 @@ public class DBMS_Counting {
 
 	/**
 	 * @param countingTemp
+	 * after insert generate key (id)
 	 */
 	public boolean inserisci(Counting countingTemp) {
 		checkConnessione();

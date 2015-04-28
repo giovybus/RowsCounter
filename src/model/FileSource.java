@@ -97,4 +97,14 @@ public class FileSource {
 	public void setRowsCounting(long rowsCounting) {
 		this.rowsCounting = rowsCounting;
 	}
+
+	/**
+	 * @return
+	 */
+	public Object[] getObject() {
+		return new Object []{
+				this.absolutePath,
+				this.rowsCounting
+		};
+	}
 }

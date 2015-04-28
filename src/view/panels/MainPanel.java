@@ -156,6 +156,9 @@ public class MainPanel extends JPanel{
 			}
 		};
 		
+		table.getColumnModel().getColumn(1).setMaxWidth(130);
+		table.getColumnModel().getColumn(1).setMinWidth(130);
+	
 		tableScroll = new JScrollPane(table);
 		
 	}
@@ -199,6 +202,17 @@ public class MainPanel extends JPanel{
 	
 	public JButton getButtonSearch(){
 		return this.buttSearch;
+	}
+	
+	public String getQuerySearch(){
+		return this.fieldSearch.getText();
+	}
+	
+	/**
+	 * @return the fieldSearch
+	 */
+	public JTextField getFieldSearch() {
+		return fieldSearch;
 	}
 	
 	public void addRow(Project p){

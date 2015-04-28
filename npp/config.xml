@@ -13,7 +13,7 @@
         <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>
         <GUIConfig name="TabSetting" size="4" replaceBySpace="no" />
         <!--App position-->
-        <GUIConfig name="AppPosition" x="64" y="2" width="955" height="659" isMaximized="no" />
+        <GUIConfig name="AppPosition" x="69" y="0" width="955" height="659" isMaximized="no" />
         <!-- For the primary scintilla view,
              2 status for Attribut lineNumberMargin, bookMarkMargin, indentGuideLine and currentLineHilitingShow: "show" or "hide"
              4 status for Attribut folderMarkStyle : "simple", "arrow", "circle" and "box"  -->
@@ -101,6 +101,17 @@
     <History nbMaxFile="15" inSubMenu="no" customLength="-1">
         <File filename="C:\Users\giovybus\Desktop\ionic.txt" />
         <File filename="C:\Program Files (x86)\EasyPHP-DevServer-14.1VC11\data\localweb\airplane\index.html" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\backup\37\45\DBMS_Prodotti.java" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\backup\37\45\UtilizzoProdotto.java" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\backup\37\45\LicenzaGui.java" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\backup\37\45\Security.java" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\backup\1\46\DBMS_Project.java" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\backup\1\46\CountingPanelCtr.java" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\backup\27\121\Counting.java" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\backup\27\121\RowsCounter.java" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\aBlood\src\main\aBlood.java" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\10" />
+        <File filename="C:\Users\giovybus\Desktop\Lavori\JAVA\Seri\RowsCounter\backup\27\121\DBMS_Settings.java" />
     </History>
     <ProjectPanels>
         <ProjectPanel id="0" workSpaceFile="" />

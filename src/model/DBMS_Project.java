@@ -94,7 +94,7 @@ public class DBMS_Project {
 			while(res.next()){
 				if(projects == null)projects = new ArrayList<>();
 				projects.add(new Project(res.getInt("id"), res.getString("absolutePath"),
-						res.getDate("lastCountingDate")));
+						res.getString("lastCountingDate")));
 			}
 			
 			conn.close();
@@ -121,7 +121,7 @@ public class DBMS_Project {
 			
 			if(res.next()){
 				p = new Project(res.getInt("id"), res.getString("absolutePath"), 
-						res.getDate("lastCountingDate"));
+						res.getString("lastCountingDate"));
 			}
 			
 			sta.close();

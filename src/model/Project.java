@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * @author Giovanni Buscarino (giovybus) Copyright (c) 2015 <br>
@@ -42,10 +41,10 @@ public class Project {
 	/**
 	 * constructor 
 	 */
-	public Project(int id, String absolutePath, Date latestCountingDate) {
+	public Project(int id, String absolutePath, String latestCountingDate) {
 		this.id = id;
 		this.absolutePath = absolutePath;
-		this.latestCountingDate = latestCountingDate;
+		setDateString(latestCountingDate);
 	}
 	
 	/**
@@ -72,7 +71,18 @@ public class Project {
 	
 	public String getDateStringIT(){
 		SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		//System.out.println(s.format(this.latestCountingDate) + ", " + latestCountingDate);
 		return s.format(this.latestCountingDate);
+	}
+	
+	public void setDateString(String latestCountingDate){
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try{
+			this.latestCountingDate = s.parse(latestCountingDate);
+		}catch(Exception e){
+			e.printStackTrace();
+			this.latestCountingDate = null;
+		}
 	}
 
 	/**

@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import features.Backup;
 import model.Counting;
 import model.DBMS_Counting;
 import model.DBMS_File;
@@ -22,6 +23,7 @@ import model.FileSource;
 import model.Project;
 import view.MainGui;
 import view.panels.CountingsPanel;
+import view.panels.FilesPanel;
 import view.panels.MainPanel;
 
 /**
@@ -52,13 +54,23 @@ public class MainPanelCtr {
 	private long numFile = 0;
 	private long numeroRigheCodice = 0;
 	
+	private FilesPanel panFiles;
+	private List<FileSource>filesSearch;
+	
+	/**
+	 * the query for the search
+	 */
+	private String query;
+	
 	/**
 	 * 
 	 */
-	public MainPanelCtr(MainGui mainGui, MainPanel mainPanel, CountingsPanel countPanel) {
+	public MainPanelCtr(MainGui mainGui, MainPanel mainPanel, 
+			CountingsPanel countPanel, FilesPanel panFiles) {
 		this.mainGui = mainGui;
 		this.mainPanel = mainPanel;
 		this.countPanel = countPanel;
+		this.panFiles = panFiles;
 		
 		this.db_project = new DBMS_Project();
 		this.db_counting = new DBMS_Counting();
@@ -117,6 +129,9 @@ public class MainPanelCtr {
 						//this is a new path
 						project = new Project(dir.getAbsolutePath(), new Date());
 						if(db_project.insert(project)){
+							//create the directory for this project
+							new File(Backup.HOME_DIR + "/" + project.getId()).mkdir();
+							
 							countingTemp = new Counting(project.getId(), new Date(), 0, 0, 0, null);
 						}
 						
@@ -130,6 +145,7 @@ public class MainPanelCtr {
 					temp.add(dir.getAbsolutePath());
 					
 					db_counting.inserisci(countingTemp); 
+					new File(Backup.HOME_DIR + "/" + project.getId() + "/" + countingTemp.getId()).mkdir();
 					filesSource = new ArrayList<FileSource>();
 					
 					navigaDirectory(temp, "java, ", dir.list().length);
@@ -147,6 +163,7 @@ public class MainPanelCtr {
 					projects.add(project);
 					
 					project = null;
+					filesSource = null;
 					
 					numeroRigheCodice = 0;
 					numFile = 0;
@@ -185,8 +202,32 @@ public class MainPanelCtr {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO
-				
+				query = mainPanel.getQuerySearch();
+				if(query != null && !query.equals("")){
+					//TODO
+					filesSearch = new ArrayList<>();
+					for(Project p : projects){
+						File dir = new File(p.getAbsolutePath());
+						if(dir.exists()){
+							List<String> temp = new ArrayList<String>();
+							temp.add(dir.getAbsolutePath());
+
+							search(temp, "java, ", dir.list().length);
+						
+						}
+					}
+					
+					//JOptionPane.showMessageDialog(null, filesSearch.size());
+					panFiles.IS_SEARCH = true;
+					panFiles.setLabQuery("query searched: " + query);
+					panFiles.setFiles(filesSearch);
+					
+					mainGui.removeMainPanel();
+					mainGui.addFilesPanel();
+				}else{
+					JOptionPane.showMessageDialog(null, "you must insert a query", 
+							"notice", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 		
@@ -200,6 +241,76 @@ public class MainPanelCtr {
 			mainPanel.addRow(p);
 		}
 		
+	}
+	
+	/**
+	 * src - primoPak
+	 *  |		|- prova.java
+	 * 	|		|- altroPak
+	 * 	|				|-settings.java
+	 * 	|
+	 *  |		|- secondoPak
+	 *  |				|-frame.java
+	 *  |				|-gui.java
+	 *  |
+	 *  |
+	 *  |
+	 * 	|- main.java
+	 * 
+	 * 
+	 * @param path
+	 * @param estensione
+	 * @param numDir
+	 */
+	private void search(List <String> path, String estensione, int numDir){
+		List <String> temp = new ArrayList<String>();
+		int contaDirectory = 0;
+		String est = estensione;
+		
+		if(numDir == 0) contaDirectory = -1;
+		
+		for(int i=0; i<path.size(); i++){
+			
+			File f = new File(path.get(i));
+				
+				File []list = f.listFiles();
+				
+				for(int j=0; j<list.length; j++){
+					if(list[j].isDirectory()){
+						temp.add(list[j].getAbsolutePath());
+						numSottoCartelle++;
+						contaDirectory++;
+					}
+					else if(controllaEstensione(list[j], estensione)){
+						//System.out.println("Dimensione del file: " + list[j].length());
+						
+						long parz = 0;
+						try {
+							BufferedReader buff = new BufferedReader(new FileReader(list[j].getAbsolutePath()));
+							
+							String s = new String();
+							while((s = buff.readLine()) != null){
+								parz++;
+								
+								if(s.contains(query)){
+									System.out.println("*** trovato *** " + list[j].getAbsolutePath() + ", alla riga: " + parz);
+									filesSearch.add(new FileSource(-1, list[j].getAbsolutePath(), "", parz));
+								}
+								
+							}
+							
+							buff.close();
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						
+						//System.out.println(list[j].getAbsolutePath()); 
+					}
+				}
+		}
+		
+		if(numDir != -1) search(temp, est, contaDirectory);
 	}
 	
 	/**
@@ -246,7 +357,18 @@ public class MainPanelCtr {
 					else if(controllaEstensione(list[j], estensione)){
 						//System.out.println("Dimensione del file: " + list[j].length());
 						long cont = contaRighe(list[j]);
-						FileSource source = new FileSource(countingTemp.getId(), list[j].getAbsolutePath(), "-", cont);
+						File backupped = new File(Backup.HOME_DIR + "/" + project.getId() + "/" 
+						+ countingTemp.getId() + "/" + list[j].getName());
+						
+						FileSource source = new FileSource(countingTemp.getId(), list[j].getAbsolutePath(), 
+								backupped.getAbsolutePath(), cont);
+						
+						try{
+							Backup.copyFileUsingFileChannels(list[j], backupped);	
+						}catch(Exception e){
+							e.printStackTrace();
+						}
+						
 						filesSource.add(source);
 						db_fileSource.inserisci(source);
 						numFile++;
