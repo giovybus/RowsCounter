@@ -22,16 +22,15 @@ public class MainGui {
 	private MainPanel panMain;
 	private CountingsPanel panCount;
 	private FilesPanel panFiles;
-	
-	/*private MainPanelCtr mainPanelCtr;
-	private CountingPanelCtr countingPanelCtr;
-	private FilesPanelCtr filesPanelCtr;*/
-	
+		
 	/**
 	 * constructor 
 	 */
 	public MainGui() {
 		panMain = new MainPanel();
+		
+		initFrame();
+		
 		panCount = new CountingsPanel();
 		panFiles = new FilesPanel();
 		
@@ -40,12 +39,12 @@ public class MainGui {
 		/*countingPanelCtr = */new CountingPanelCtr(this, panCount, panFiles);
 		/*filesPanelCtr = */new FilesPanelCtr(this, panFiles);
 		
-		initFrame();
 	}
 
 
 	/**
-	 * 
+	 * inizializza il frame e gli 
+	 * inserisce il pannello
 	 */
 	private void initFrame() {
 		frm = new JFrame("Rows Counter (v. " + RowsCounter.VERSION + ")");

@@ -152,12 +152,51 @@ public class DBMS_Project {
 				project.setId(res.getInt(1));
 			}
 			
+			sta.close();
+			res.close();
+			conn.close();
+			
 			return true;
 		}catch(Exception e){
 			e.printStackTrace();
 			return false;
 		}
 		
+	}
+
+	public boolean update(Project project){
+		checkConnessione();
+		try{
+			sta = conn.createStatement();
+			sta.execute("UPDATE project SET "
+					+ "absolutePath='" + project.getAbsolutePath() + "',"
+					+ "lastCountingDate='" + project.getDateStringUS() + "' "
+					+ "WHERE id=" + project.getId());
+			sta.close();
+			conn.close();
+			
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * @param p
+	 * @return
+	 */
+	public boolean delete(Project p) {
+		checkConnessione();
+		try {
+			sta = conn.createStatement();
+			sta.execute("DELETE FROM project where id=" + p.getId());
+			return true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 }

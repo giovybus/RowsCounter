@@ -3,6 +3,10 @@ package controller;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -57,6 +61,8 @@ public class MainPanelCtr {
 	private FilesPanel panFiles;
 	private List<FileSource>filesSearch;
 	
+	private static final String exstensions = "java,c,cpp,h,el,php,js, ";
+	
 	/**
 	 * the query for the search
 	 */
@@ -84,6 +90,7 @@ public class MainPanelCtr {
 		}
 		
 		setActionListeners();
+	
 	}
 
 	/**
@@ -138,6 +145,7 @@ public class MainPanelCtr {
 						mainPanel.addRow(project);
 					}else{
 						//this is an exist path
+						project.setLatestCountingDate(new Date());
 						countingTemp = new Counting(project.getId(), new Date(), 0, 0, 0, null);
 					}
 					
@@ -145,10 +153,12 @@ public class MainPanelCtr {
 					temp.add(dir.getAbsolutePath());
 					
 					db_counting.inserisci(countingTemp); 
+					db_project.update(project);
+					
 					new File(Backup.HOME_DIR + "/" + project.getId() + "/" + countingTemp.getId()).mkdir();
 					filesSource = new ArrayList<FileSource>();
 					
-					navigaDirectory(temp, "java, ", dir.list().length);
+					navigaDirectory(temp, exstensions, dir.list().length);
 					
 					System.out.println(numSottoCartelle + ", " + numFile + ", " + numeroRigheCodice);
 					countingTemp.setNumberOfPack(numSottoCartelle);
@@ -168,6 +178,8 @@ public class MainPanelCtr {
 					numeroRigheCodice = 0;
 					numFile = 0;
 					numSottoCartelle = 0;
+					
+					JOptionPane.showMessageDialog(null, "all done");
 				}
 				
 			}
@@ -202,35 +214,83 @@ public class MainPanelCtr {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				query = mainPanel.getQuerySearch();
-				if(query != null && !query.equals("")){
-					//TODO
-					filesSearch = new ArrayList<>();
-					for(Project p : projects){
-						File dir = new File(p.getAbsolutePath());
-						if(dir.exists()){
-							List<String> temp = new ArrayList<String>();
-							temp.add(dir.getAbsolutePath());
-
-							search(temp, "java, ", dir.list().length);
-						
-						}
-					}
-					
-					//JOptionPane.showMessageDialog(null, filesSearch.size());
-					panFiles.IS_SEARCH = true;
-					panFiles.setLabQuery("query searched: " + query);
-					panFiles.setFiles(filesSearch);
-					
-					mainGui.removeMainPanel();
-					mainGui.addFilesPanel();
-				}else{
-					JOptionPane.showMessageDialog(null, "you must insert a query", 
-							"notice", JOptionPane.WARNING_MESSAGE);
-				}
+				searchEngine();
 			}
 		});
 		
+		this.mainPanel.getFieldSearch().addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER){
+					searchEngine();
+				}
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {}
+		});
+		
+		this.mainPanel.getButtonDelete().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(mainPanel.getSelectedRow() != -1){
+					Project p = projects.get(mainPanel.getSelectedRow());
+					
+					int choose = JOptionPane.showConfirmDialog(null, "Are you sure to delete the project:\n" + p.getAbsolutePath(),
+							"warning",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+					
+					if(choose == JOptionPane.YES_OPTION){
+						if(db_project.delete(p)){
+							refreshTable(p.getId());
+						}else{
+							JOptionPane.showMessageDialog(null, "Erorr to delete the project", 
+									"error", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}else{
+					JOptionPane.showMessageDialog(null, "You must selected a row from the table", 
+							"warning", JOptionPane.WARNING_MESSAGE);
+				}
+				
+			}
+
+		});
+		
+	}
+	
+	private void searchEngine(){
+		query = mainPanel.getQuerySearch();
+		if(query != null && !query.equals("")){
+			//TODO
+			filesSearch = new ArrayList<>();
+			for(Project p : projects){
+				File dir = new File(p.getAbsolutePath());
+				if(dir.exists()){
+					List<String> temp = new ArrayList<String>();
+					temp.add(dir.getAbsolutePath());
+
+					search(temp, exstensions, dir.list().length);
+				
+				}
+			}
+			
+			//JOptionPane.showMessageDialog(null, filesSearch.size());
+			panFiles.IS_SEARCH = true;
+			panFiles.setLabQuery("query searched: " + query);
+			panFiles.setFiles(filesSearch);
+			
+			mainGui.removeMainPanel();
+			mainGui.addFilesPanel();
+		}else{
+			JOptionPane.showMessageDialog(null, "you must insert a query", 
+					"notice", JOptionPane.WARNING_MESSAGE);
+		}
 	}
 
 	/**
@@ -240,6 +300,50 @@ public class MainPanelCtr {
 		for(Project p : projects){
 			mainPanel.addRow(p);
 		}
+		
+		mainPanel.getTable().addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				if(arg0.getClickCount() == 2){
+					
+					countings = db_counting.getCountingForProject(projects.get(mainPanel.getSelectedRow()));
+					
+					mainGui.removeMainPanel();
+					countPanel.setCountings(countings);
+					mainGui.addCountingPanel();
+				}
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {}
+		});
+		
+	}
+	
+	/**
+	 * refresh table after delete
+	 * a project
+	 */
+	private void refreshTable(int idToDelete) {
+		for(int i=0; i<projects.size(); i++){
+			if(projects.get(i).getId() == idToDelete){
+				projects.remove(i);
+				break;
+			}
+		}
+		
+		mainPanel.resetTable();
+		fillTable();
 		
 	}
 	

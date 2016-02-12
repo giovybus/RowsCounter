@@ -2,6 +2,8 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JOptionPane;
 
@@ -46,18 +48,65 @@ public class FilesPanelCtr {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				String path = filePanel.smartGetAbsolutePath();
-				
-				if(path != null){
-					try{
-						Runtime.getRuntime().exec("./npp/notepad++.exe " + path + " -n" + filePanel.getRowOfFileSerched() + " -nosession");
-						
-					}catch(Exception ee){
-						ee.printStackTrace();
-					}	
+				if(filePanel.isRowSelected()){
+					String path = filePanel.smartGetAbsolutePath();
+					if(path != null){
+						try{
+							Runtime.getRuntime().exec("./npp/notepad++.exe " + path + " -n" + filePanel.getRowOfFileSerched() 
+									+ " -nosession -ro");
+							
+						}catch(Exception ee){
+							ee.printStackTrace();
+						}	
+					}else{
+						JOptionPane.showMessageDialog(null, "the file not exist", "notice", JOptionPane.WARNING_MESSAGE);
+					}
 				}else{
-					JOptionPane.showMessageDialog(null, "the file not exist", "notice", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "you must select a row of the table", "notice", JOptionPane.WARNING_MESSAGE);
 				}
+			}
+		});
+		
+		//this.filePanel.getTable().setAutoCreateRowSorter(true);
+		this.filePanel.getTable().addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(e.getClickCount() == 2){
+					String path = filePanel.smartGetAbsolutePath();
+					if(path != null){
+						try{
+							Runtime.getRuntime().exec("./npp/notepad++.exe " + path + " -n" + filePanel.getRowOfFileSerched() 
+									+ " -nosession -ro");
+							
+						}catch(Exception ee){
+							ee.printStackTrace();
+						}	
+					}else{
+						JOptionPane.showMessageDialog(null, "the file not exist", "notice", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+		});
+		
+		this.filePanel.getButtPDF().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Pdf pdf = new Pdf();
+				pdf.scriviPdf(filePanel.getFiles());
 			}
 		});
 	}

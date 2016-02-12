@@ -31,7 +31,7 @@ public class FilesPanel extends JPanel{
 	private JPanel panCenter;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private String []col = {"Absolute path", "N° of rows"};
+	public static final String []col = {"Absolute path", "N° of rows"};
 	private JScrollPane tableScroll;
 	
 	private JPanel panSouth;
@@ -49,6 +49,12 @@ public class FilesPanel extends JPanel{
 	 * using notepad++
 	 */
 	private JButton buttOpenFile;
+	
+	/**
+	 * stampa in pdf tutti i file
+	 * con le righe di codice
+	 */
+	private JButton buttPDF;
 	
 	private List<FileSource>files;
 	
@@ -101,6 +107,7 @@ public class FilesPanel extends JPanel{
 		
 		table.getColumnModel().getColumn(1).setMaxWidth(80);
 		table.getColumnModel().getColumn(1).setMinWidth(80);
+		table.setAutoCreateRowSorter(true);
 		
 		tableScroll = new JScrollPane(table);
 			
@@ -130,6 +137,9 @@ public class FilesPanel extends JPanel{
 		
 		buttOpenFile = new JButton("Open file");
 		panSouth.add(buttOpenFile);
+		
+		buttPDF = new JButton("PDF");
+		panSouth.add(buttPDF);
 	}
 
 
@@ -162,13 +172,33 @@ public class FilesPanel extends JPanel{
 		return buttOpenFile;
 	}
 
-
+	/**
+	 * @return the buttPDF
+	 */
+	public JButton getButtPDF() {
+		return buttPDF;
+	}
+	
+	/**
+	 * @return the table
+	 */
+	public JTable getTable() {
+		return table;
+	}
+	
 	/**
 	 * @param files
 	 */
 	public void setFiles(List<FileSource> files) {
 		this.files = files;
 		fillTable();		
+	}
+	
+	/**
+	 * @return the files
+	 */
+	public List<FileSource> getFiles() {
+		return files;
 	}
 	
 	public void addRow(FileSource f){
@@ -233,6 +263,15 @@ public class FilesPanel extends JPanel{
 				return null;
 			}
 		}
+	}
+	
+	/**
+	 * mi dice se ho selezionato una riga della tabella
+	 * @return
+	 */
+	public boolean isRowSelected(){
+		if(this.table.getSelectedRow() == -1)return false;
+		else return true;
 	}
 
 

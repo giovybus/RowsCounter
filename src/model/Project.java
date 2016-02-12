@@ -84,6 +84,21 @@ public class Project {
 			this.latestCountingDate = null;
 		}
 	}
+	
+	/**
+	 * @param latestCountingDate the latestCountingDate to set
+	 */
+	public void setLatestCountingDate(Date latestCountingDate) {
+		this.latestCountingDate = latestCountingDate;
+	}
+	
+	/**
+	 * @return
+	 */
+	public String getDateStringUS() {
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return s.format(this.latestCountingDate);
+	}
 
 	/**
 	 * @return the absolutePath
@@ -122,5 +137,4 @@ public class Project {
 		
 		return o;
 	}
-	
 }

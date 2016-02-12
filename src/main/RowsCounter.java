@@ -17,7 +17,9 @@ public class RowsCounter {
 	/**
 	 * program version
 	 */
-	public static final String VERSION = "1.3.1";
+	public static final String VERSION = "1.3.0-beta2";
+	
+	public static final String PATH_DESKTOP = System.getenv("HOMEPATH") + "\\Desktop\\";
 	
 	/**
 	 * main class

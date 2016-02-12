@@ -107,4 +107,20 @@ public class FileSource {
 				this.rowsCounting
 		};
 	}
+
+	/**
+	 * @param parseInt
+	 * @return
+	 */
+	public String getAbsolutePathSmart(int separatore) {
+		this.absolutePath = this.absolutePath.replace("\\", "/");
+		String []splittato = absolutePath.split("/");
+		String tot = new String();
+		
+		for(int i=separatore; i<splittato.length; i++){
+			tot += splittato[i] + "/";
+		}
+		
+		return tot;
+	}
 }

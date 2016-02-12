@@ -32,7 +32,7 @@ private static final long serialVersionUID = 1L;
 	private JPanel panCenter;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private String []col = {"Date of counting", "N° of package", "N° of file", "N° of rows", "Extensions"};
+	private String []col = {"Date of counting", "N° of package", "N° of file", "N° of rows", "Extensions", "Diff"};
 	private JScrollPane tableScroll;
 	
 	private JPanel panSouth;
@@ -113,6 +113,7 @@ private static final long serialVersionUID = 1L;
 		
 		TextPrompt tp = new TextPrompt("insert search query for this project", fieldSearch);
 		tp.setForeground(Color.LIGHT_GRAY);
+		
 	}
 
 	/**
@@ -139,6 +140,8 @@ private static final long serialVersionUID = 1L;
 			}
 		};
 		
+		table.getColumnModel().getColumn(0).setMinWidth(100);
+		
 		tableScroll = new JScrollPane(table);
 		
 	}
@@ -155,7 +158,7 @@ private static final long serialVersionUID = 1L;
 		buttView = new JButton("View files");
 		panSouth.add(buttView);
 		
-		buttCounting = new JButton("Counting");
+		buttCounting = new JButton("Count");
 		panSouth.add(buttCounting);
 		
 		buttExport = new JButton("Export PDF");
@@ -213,14 +216,21 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	/**
+	 * @return the table
+	 */
+	public JTable getTable() {
+		return table;
+	}
+	
+	/**
 	 * @return the fieldSearch
 	 */
 	public JTextField getFieldSearch() {
 		return fieldSearch;
 	}
 	
-	public void addRow(Counting c){
-		tableModel.addRow(c.getObject());
+	public void addRow(Counting c, long diff){
+		tableModel.addRow(c.getObject(diff));
 	}
 	
 	public void setCountings(List<Counting>countings){
@@ -228,8 +238,14 @@ private static final long serialVersionUID = 1L;
 		
 		this.tableModel.setRowCount(0);
 		if(this.countings != null){
-			for(Counting c : this.countings){
+			/*for(Counting c : this.countings){
 				addRow(c);
+			}*/
+			for(int i=0; i<this.countings.size(); i++){
+				if(i==0) addRow(this.countings.get(i), 0);
+				else addRow(this.countings.get(i), 
+						(this.countings.get(i).getNumberOfRows() 
+								- this.countings.get(i-1).getNumberOfRows()));
 			}
 		}
 	}

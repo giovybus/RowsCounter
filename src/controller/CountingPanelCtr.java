@@ -2,13 +2,14 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import model.DBMS_File;
 import model.FileSource;
-
 import view.MainGui;
 import view.panels.CountingsPanel;
 import view.panels.FilesPanel;
@@ -75,6 +76,33 @@ public class CountingPanelCtr {
 				}
 				
 			}
+		});
+		
+		this.countingPanel.getTable().addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(e.getClickCount() == 2){
+					mainGui.removeCountingPanel();
+					List<FileSource>files = db_file.getFilesByCounting(countingPanel.getCountingSelected());
+					
+					filePanel.setFiles(files);
+					filePanel.IS_SEARCH = false;
+					mainGui.addFilesPanel();
+				}
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {}
 		});
 	}
 	

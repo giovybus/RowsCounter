@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -70,6 +71,12 @@ public class MainPanel extends JPanel{
 	private JButton buttOpen;
 	
 	/**
+	 * this is progress bar
+	 * 
+	 */
+	private JProgressBar progressBar;
+	
+	/**
 	 * default constructor
 	 */
 	public MainPanel() {
@@ -120,7 +127,7 @@ public class MainPanel extends JPanel{
 		buttView = new JButton("View project");
 		panSouth.add(buttView);
 		
-		buttCounting = new JButton("Counting");
+		buttCounting = new JButton("Count");
 		panSouth.add(buttCounting);
 		
 		buttExport = new JButton("Export PDF");
@@ -131,6 +138,9 @@ public class MainPanel extends JPanel{
 		
 		buttDelete = new JButton("Delete");
 		panSouth.add(buttDelete);
+		
+		progressBar = new JProgressBar(0, 100);
+		panSouth.add(progressBar);
 	}
 
 	/**
@@ -209,6 +219,20 @@ public class MainPanel extends JPanel{
 	}
 	
 	/**
+	 * @return the table
+	 */
+	public JTable getTable() {
+		return table;
+	}
+	
+	/**
+	 * @return the progressBar
+	 */
+	public JProgressBar getProgressBar() {
+		return progressBar;
+	}
+	
+	/**
 	 * @return the fieldSearch
 	 */
 	public JTextField getFieldSearch() {
@@ -221,6 +245,14 @@ public class MainPanel extends JPanel{
 	
 	public int getSelectedRow(){
 		return this.table.getSelectedRow();
+	}
+
+	/**
+	 * delete all items from the table
+	 */
+	public void resetTable() {
+		this.tableModel.setRowCount(0);
+		
 	}
 
 }

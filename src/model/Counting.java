@@ -206,13 +206,14 @@ public class Counting {
 	/**
 	 * @return
 	 */
-	public Object[] getObject() {
+	public Object[] getObject(long diff) {
 		return new Object[]{
 				getDateCountingIT(),
 				this.numberOfPack,
 				this.numberOfFiles,
 				this.numberOfRows,
-				"ext"
+				"ext",
+				diff
 		};
 	}
 }
